@@ -1,6 +1,10 @@
 import React from 'react'
-import Hello from './pages/Hello'
+import {BrowserRouter as Router} from 'react-router-dom'
+import Routes from './routes'
+
 
 export default () => (
-  <Hello />
+  <Router>
+    <Routes />
+  </Router>
 )
