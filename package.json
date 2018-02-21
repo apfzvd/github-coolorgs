@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "server": "webpack-dev-server --history-api-fallback --hot --open",
-    "start": "yarn build && yarn server"
+    "start": "npm run build && npm run server"
   },
   "repository": {
     "type": "git",
