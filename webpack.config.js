@@ -13,11 +13,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.styl$/,
+        test: /\.css$/,
         exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract({
-          use: ['css-loader', { loader: 'stylus-loader' }]
-        })
+        use: ExtractTextPlugin.extract([
+          {loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]_[local]_[hash:base64:5]'},
+        ])
+      },
+      {
+        test: /\.css$/,
+        exclude: path.resolve(__dirname, 'src/'),
+        loader: ExtractTextPlugin.extract('css-loader')
       },
       {
         test: /\.(js|jsx)$/,
@@ -27,11 +32,23 @@ module.exports = {
     ]
   },
 
+  resolve: {
+    extensions: ['.js'],
+    alias: {
+      js: path.resolve(__dirname, 'src/js/'),
+      common: path.resolve(__dirname, 'src/js/common/'),
+      pages: path.resolve(__dirname, 'src/js/pages/')
+    }
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src/', 'templates', 'index.html')
+      template: path.join(__dirname, 'src/templates/index.html')
     }),
-    new ExtractTextPlugin('app.css')
+    new ExtractTextPlugin({
+      filename: 'app.css',
+      allChunks: true
+    })
   ],
 
   devServer: {

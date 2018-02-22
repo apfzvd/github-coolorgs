@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './style/app_style.styl'
 import App from './js/index'
+import 'tachyons/css/tachyons.min.css'
 
 ReactDOM.render(
   <App />,

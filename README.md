@@ -5,7 +5,8 @@ This project uses the following technologies:
 
 - React
 - Redux
-- Stylus
+- Tachyons
+- CSS Modules
 
 ### Getting Stated
 
@@ -20,5 +21,3 @@ Then, you need to build the application and start the dev server:
 ```
 yarn start
 ```
-
-### Running

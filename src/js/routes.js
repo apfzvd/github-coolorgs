@@ -2,12 +2,11 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 //Pages
-import Hello from './pages/Hello'
-import Teste from './pages/Teste'
+import AllRepos from './pages/AllRepos'
 
 export default () => (
   <Switch>
-    <Route exact path="/" component={Hello}/>
-    <Route path="/:repo" component={Teste}/>
+    <Route exact path="/" component={AllRepos}/>
+    <Route path="/:repo" component={AllRepos}/>
   </Switch>
 )
