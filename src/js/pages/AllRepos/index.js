@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { populateRepos, populateDetails, setLoadingDetails } from './redux/allrepos'
-import { getAllRepos, getDetails } from './requests'
+import { getAllRepos } from './requests'
 import s from './allrepo-style.css'
 
 import ListRepos from './components/ListRepos'
@@ -10,7 +10,7 @@ import RepoDetail from './components/RepoDetail'
 class AllRepos extends Component {
 
   componentDidMount () {
-    const { dpPopulateRepos, dpPopulateDetails } = this.props
+    const { dpPopulateRepos } = this.props
 
     getAllRepos('marvin-ai')
       .then(({ data }) => dpPopulateRepos(data.items, data.total_count))
@@ -19,12 +19,11 @@ class AllRepos extends Component {
   componentWillReceiveProps(nextProps) {
     const oldparams = this.props.match.params
     const { params } = nextProps.match
-    const { dpPopulateDetails, dpSetLoadingDetails } = this.props
+    const { dpPopulateDetails, all } = this.props
 
     if (params.hasOwnProperty('repo') && params.repo !== oldparams.repo) {
-      dpSetLoadingDetails()
-      getDetails('marvin-ai', params.repo)
-        .then(({ data }) => dpPopulateDetails(data))
+      const chosen = all.filter(repo => (repo.name === params.repo))[0]
+      dpPopulateDetails(chosen)
     }
   }
 
