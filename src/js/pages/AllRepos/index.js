@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { populateRepos, populateDetails, setLoadingDetails } from './redux/allrepos'
-import { getAllRepos } from './requests'
+import { getFirstRepos } from './requests'
 import s from './allrepo-style.css'
 
 import ListRepos from './components/ListRepos'
@@ -12,11 +12,11 @@ class AllRepos extends Component {
   componentDidMount () {
     const { dpPopulateRepos } = this.props
 
-    getAllRepos('marvin-ai')
+    getFirstRepos('marvin-ai')
       .then(({ data }) => dpPopulateRepos(data.items, data.total_count))
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const oldparams = this.props.match.params
     const { params } = nextProps.match
     const { dpPopulateDetails, all } = this.props
@@ -27,7 +27,7 @@ class AllRepos extends Component {
     }
   }
 
-  render() {
+  render () {
     const { loading, loading_details, all, details } = this.props
 
     return (
