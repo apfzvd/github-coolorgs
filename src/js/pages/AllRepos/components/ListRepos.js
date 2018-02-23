@@ -1,16 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { NavLink  } from 'react-router-dom'
+import s from '../allrepo-style.css'
 
-const ListRepos = ({ repos }) => {
+const ListRepos = ({ repos, org }) => {
   return (
-    <ul>
-      {
-        repos.map(r => {
-          return <li key={r.id}><Link to={`/${r.name}`}>{ r.name }</Link></li>
-        })
-      }
-    </ul>
+    <div className={`w-40 min-vh-100 flex justify-right tr white ${s.blue}`}>
+      <div className='w-80'>
+        <h1> { org } </h1>
+        <ul className='list'>
+          {
+            repos.map( r => {
+              return (
+                <li key={r.id}>
+                  <NavLink className={`link db mv3 white ${s.closedfolder}`} activeClassName={s.openfolder} to={`/${r.name}`}>
+                    { r.name }
+                  </NavLink >
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+    </div>
   )
 }
 

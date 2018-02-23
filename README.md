@@ -1,6 +1,6 @@
-# GitHub CoolProjects
+# Github CoolOrgs
 
-Display's latest public projects on Github.
+Display all repos in a Github Organization.
 This project uses the following technologies:
 
 - React

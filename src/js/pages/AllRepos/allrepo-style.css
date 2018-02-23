@@ -1,3 +1,21 @@
-.repo {
-  background: red;
+.blue {
+  background: #4d78e8;
+}
+
+.closedfolder:after {
+  content: '\f07b';
+  margin-left: .5rem;
+  display: inline-block;
+  font-family: FontAwesome !important;
+  font-size: inherit;
+  text-rendering: auto;
+}
+
+.openfolder:after {
+  content: '\f07c';
+  margin-left: .5rem;
+  display: inline-block;
+  font-family: FontAwesome !important;
+  font-size: inherit;
+  text-rendering: auto;
 }
