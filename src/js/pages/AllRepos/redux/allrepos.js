@@ -1,12 +1,15 @@
 // Constants
 const GET_REPOS = 'GET_REPOS'
 const GET_DETAILS = 'GET_DETAILS'
+const GET_COMMITS = 'GET_COMMITS'
+const MORE_COMMITS = 'MORE_COMMITS'
 
 const initialState = {
   loading: true,
   repos: [],
   total: 0,
-  open_repo: {}
+  open_repo: {},
+  commits: []
 }
 
 // Reducer
@@ -24,6 +27,11 @@ export default (state = initialState, action) => {
       ...state,
       open_repo: action.res
     }
+  case GET_COMMITS:
+    return {
+      ...state,
+      commits: action.res
+    }
   default:
     return state
   }
@@ -38,5 +46,10 @@ export const populateRepos = (res, total) => ({
 
 export const populateDetails = res => ({
   type: GET_DETAILS,
+  res
+})
+
+export const getCommits = res => ({
+  type: GET_COMMITS,
   res
 })
