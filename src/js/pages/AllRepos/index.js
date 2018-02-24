@@ -11,31 +11,39 @@ import RepoDetail from './components/RepoDetail'
 class AllRepos extends Component {
 
   async getAllContribs (org, repo) {
-    const { dpContribCount } = this.props
+    const { dpContribCount, error } = this.props
     const { headers } = await getContributorsTotal(org, repo)
+
     if (headers.hasOwnProperty('link')) {
-      const contribsCount = getLastPage(headers.link)
+      const contribsCount = getLastPage(headers.link) // gets last page on github's pagination
       dpContribCount(contribsCount)
+    } else { // doensn't show pagination if there's only one page
+      !error.status && dpContribCount(1)
     }
   }
 
   async getAllCommits (org, repo) {
     const { dpCommitCount } = this.props
     const { headers } = await getCommitsTotal(org, repo)
+
     if (headers.hasOwnProperty('link')) {
-      const commitCount = getLastPage(headers.link)
+      const commitCount = getLastPage(headers.link) // gets last page on github's pagination
       dpCommitCount(commitCount)
+    } else {
+      dpCommitCount(1)
     }
   }
 
   async getFirstCommits (org, repo) {
-    const { dpGetCommits, dpthrowError } = this.props
+    const { dpCommitCount, dpContribCount, dpGetCommits, dpthrowError } = this.props
 
     try {
       const { data } = await getCommitsPerPage(org, repo, '1')
       dpGetCommits(data)
     } catch ({ ...err }) {
       dpthrowError(`Erro: ${err.response.data.message}`)
+      dpCommitCount(0)
+      dpContribCount(0)
     }
   }
 
@@ -56,9 +64,9 @@ class AllRepos extends Component {
 
       if (params.hasOwnProperty('repo')) {
         this.populateRepoDetails(data.items, params)
-        this.getFirstCommits(org, params.repo)
         this.getAllContribs(org, params.repo)
         this.getAllCommits(org, params.repo)
+        this.getFirstCommits(org, params.repo)
       }
     } catch (err) {
       dpthrowError('Essa organização não existe :(')

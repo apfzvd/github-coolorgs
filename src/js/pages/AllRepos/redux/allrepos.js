@@ -15,11 +15,11 @@ const initialState = {
   },
   repos: [],
   total: 0,
-  open_repo: {
-    name: ''
-  },
+  open_repo: {},
   commits: [],
   total_commits: false,
+  pages: 1,
+  current_page: 1,
   total_contribs: false
 }
 
@@ -58,7 +58,8 @@ export default (state = initialState, action) => {
   case COMMIT_COUNT:
     return {
       ...state,
-      total_commits: action.total
+      total_commits: action.total,
+      pages: Math.round((parseFloat(action.total)) / 20)
     }
   case CONTRIB_COUNT:
     return {
