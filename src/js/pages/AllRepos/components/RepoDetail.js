@@ -12,12 +12,13 @@ const DetailHeader = ({ star, fork, contrib }) => (
   </div>
 )
 
-const RepoDetail = ({ commits, id, stargazers_count, forks_count }) => {
+const RepoDetail = ({ commits, id, stargazers_count, forks_count, error }) => {
   return (
     <div className='w-60 black-50'>
-      { !id && <h4 className='tc'>Escolha um repositório!</h4> }
+      { (!error.status && !id) && <h4 className='tc'>Escolha um repositório!</h4> }
       { id && <DetailHeader star={stargazers_count} fork={forks_count} contrib={'0'}/> }
-      { id && <ListCommits commits={commits} /> }
+      { error.status && <h4 className='tc'> {error.msg} </h4> }
+      { (!error.status && id) && <ListCommits commits={commits} /> }
     </div>
   )
 }

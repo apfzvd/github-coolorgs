@@ -1,11 +1,17 @@
 // Constants
 const GET_REPOS = 'GET_REPOS'
+const REPO_FAIL = 'REPO_FAIL'
 const GET_DETAILS = 'GET_DETAILS'
 const GET_COMMITS = 'GET_COMMITS'
 const MORE_COMMITS = 'MORE_COMMITS'
 
 const initialState = {
+  org: 'marvin-ai',
   loading: true,
+  error: {
+    status: false,
+    msg: ''
+  },
   repos: [],
   total: 0,
   open_repo: {
@@ -22,16 +28,28 @@ export default (state = initialState, action) => {
       ...state,
       loading: false,
       repos: action.res,
-      total: action.total
+      total: action.total,
+      error: initialState.error
+    }
+  case REPO_FAIL:
+    return {
+      ...state,
+      loading: false,
+      error: {
+        status: true,
+        msg: action.msg
+      }
     }
   case GET_DETAILS:
     return {
       ...state,
+      error: initialState.error,
       open_repo: action.res
     }
   case GET_COMMITS:
     return {
       ...state,
+      error: initialState.error,
       commits: action.res
     }
   default:
@@ -44,6 +62,11 @@ export const populateRepos = (res, total) => ({
   type: GET_REPOS,
   res,
   total
+})
+
+export const throwError = msg => ({
+  type: REPO_FAIL,
+  msg
 })
 
 export const populateDetails = res => ({
