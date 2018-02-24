@@ -41,7 +41,8 @@ module.exports = {
     alias: {
       js: path.resolve(__dirname, 'src/js/'),
       common: path.resolve(__dirname, 'src/js/common/'),
-      pages: path.resolve(__dirname, 'src/js/pages/')
+      pages: path.resolve(__dirname, 'src/js/pages/'),
+      utils: path.resolve(__dirname, 'src/js/utils/')
     }
   },
 

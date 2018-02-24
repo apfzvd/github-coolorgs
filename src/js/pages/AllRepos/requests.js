@@ -12,5 +12,8 @@ export const getReposPerPage = (orgname, page) =>
 export const getCommitsPerPage = (orgname, repo, page) =>
   http.get(`/repos/${orgname}/${repo}/commits?page=${page}&per_page=20`)
 
-export const getContributors = (orgname, repo) =>
-  http.get(`/repos/${orgname}/${repo}/contributors`)
+export const getContributorsTotal = (orgname, repo) =>
+  http.get(`/repos/${orgname}/${repo}/contributors?page=1&per_page=1`)
+
+export const getCommitsTotal = (orgname, repo) =>
+  http.get(`/repos/${orgname}/${repo}/commits?page=1&per_page=1`)

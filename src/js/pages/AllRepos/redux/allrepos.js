@@ -3,7 +3,8 @@ const GET_REPOS = 'GET_REPOS'
 const REPO_FAIL = 'REPO_FAIL'
 const GET_DETAILS = 'GET_DETAILS'
 const GET_COMMITS = 'GET_COMMITS'
-const MORE_COMMITS = 'MORE_COMMITS'
+const COMMIT_COUNT = 'COMMIT_COUNT'
+const CONTRIB_COUNT = 'CONTRIB_COUNT'
 
 const initialState = {
   org: 'marvin-ai',
@@ -17,7 +18,9 @@ const initialState = {
   open_repo: {
     name: ''
   },
-  commits: []
+  commits: [],
+  total_commits: false,
+  total_contribs: false
 }
 
 // Reducer
@@ -52,6 +55,16 @@ export default (state = initialState, action) => {
       error: initialState.error,
       commits: action.res
     }
+  case COMMIT_COUNT:
+    return {
+      ...state,
+      total_commits: action.total
+    }
+  case CONTRIB_COUNT:
+    return {
+      ...state,
+      total_contribs: action.total
+    }
   default:
     return state
   }
@@ -77,4 +90,14 @@ export const populateDetails = res => ({
 export const getCommits = res => ({
   type: GET_COMMITS,
   res
+})
+
+export const contribCount = total => ({
+  type: CONTRIB_COUNT,
+  total
+})
+
+export const commitCount = total => ({
+  type: COMMIT_COUNT,
+  total
 })

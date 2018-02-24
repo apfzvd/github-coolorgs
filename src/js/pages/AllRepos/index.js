@@ -1,13 +1,32 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { populateRepos, throwError, populateDetails, getCommits } from './redux/allrepos'
-import { getFirstRepos, getCommitsPerPage, getContributors } from './requests'
+import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount } from './redux/allrepos'
+import { getFirstRepos, getCommitsPerPage, getContributorsTotal, getCommitsTotal } from './requests'
+import { getLastPage } from 'utils'
 // import s from './allrepo-style.css'
 
 import ListRepos from './components/ListRepos'
 import RepoDetail from './components/RepoDetail'
 
 class AllRepos extends Component {
+
+  async getAllContribs (org, repo) {
+    const { dpContribCount } = this.props
+    const { headers } = await getContributorsTotal(org, repo)
+    if (headers.hasOwnProperty('link')) {
+      const contribsCount = getLastPage(headers.link)
+      dpContribCount(contribsCount)
+    }
+  }
+
+  async getAllCommits (org, repo) {
+    const { dpCommitCount } = this.props
+    const { headers } = await getCommitsTotal(org, repo)
+    if (headers.hasOwnProperty('link')) {
+      const commitCount = getLastPage(headers.link)
+      dpCommitCount(commitCount)
+    }
+  }
 
   async getFirstCommits (org, repo) {
     const { dpGetCommits, dpthrowError } = this.props
@@ -37,7 +56,9 @@ class AllRepos extends Component {
 
       if (params.hasOwnProperty('repo')) {
         this.populateRepoDetails(data.items, params)
-        this.getFirstCommits(org, params.repo, '1')
+        this.getFirstCommits(org, params.repo)
+        this.getAllContribs(org, params.repo)
+        this.getAllCommits(org, params.repo)
       }
     } catch (err) {
       dpthrowError('Essa organização não existe :(')
@@ -54,20 +75,20 @@ class AllRepos extends Component {
     const { repos, org } = this.props
 
     if (params.hasOwnProperty('repo') && params.repo !== oldparams.repo) {
-      const c = await getContributors(org, params.repo)
-      console.log('contrib', c)
-      this.populateRepoDetails(repos, params)
-      this.getFirstCommits(org, params.repo, '1')
+      this.getAllContribs(org, params.repo)
+      this.getAllCommits(org, params.repo)
+      this.populateRepoDetails(repos, params.repo)
+      this.getFirstCommits(org, params.repo)
     }
   }
 
   render () {
-    const { loading, error, repos, open_repo, commits, org } = this.props
+    const { loading, error, repos, open_repo, commits, org, total_contribs } = this.props
 
     return (
       <section className='flex'>
         { loading ? 'Loading...' : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
-        { !loading && <RepoDetail error={error} commits={commits} {...open_repo}/> }
+        { !loading && <RepoDetail error={error} commits={commits} contributors={total_contribs} {...open_repo}/> }
       </section>
     )
   }
@@ -81,7 +102,9 @@ const mapDispatchToProps = dispatch => {
     dpPopulateRepos: (res, total) => dispatch(populateRepos(res, total)),
     dpthrowError: msg => dispatch(throwError(msg)),
     dpPopulateDetails: res => dispatch(populateDetails(res)),
-    dpGetCommits: res => dispatch(getCommits(res))
+    dpGetCommits: res => dispatch(getCommits(res)),
+    dpContribCount: total => dispatch(contribCount(total)),
+    dpCommitCount: total => dispatch(commitCount(total))
   }
 }
 
