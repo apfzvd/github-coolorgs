@@ -9,37 +9,53 @@ import RepoDetail from './components/RepoDetail'
 
 class AllRepos extends Component {
 
-  componentDidMount () {
-    const { dpPopulateRepos, dpPopulateDetails, dpGetCommits } = this.props
+  async getFirstCommits (org, repo) {
+    const { dpGetCommits } = this.props
+
+    try {
+      const { data } = await getCommitsPerPage(org, repo, '1')
+      dpGetCommits(data)
+    } catch (err) {
+      dpGetCommits([])
+    }
+  }
+
+  populateRepoDetails (repos, params) {
+    const { dpPopulateDetails } = this.props
+
+    const open_repo = repos.filter(r => (r.name === params.repo))[0]
+    dpPopulateDetails(open_repo)
+  }
+
+  async firstLoadDataFetch () {
+    const { dpPopulateRepos } = this.props
     const { params } = this.props.match
 
-    getFirstRepos('marvin-ai')
-      .then(({ data }) => {
-        dpPopulateRepos(data.items, data.total_count)
+    try {
+      const { data } = await getFirstRepos('marvin-ai')
+      dpPopulateRepos(data.items, data.total_count)
 
-        if (params.hasOwnProperty('repo')) {
-          const open_repo = data.items.filter(r => (r.name === params.repo))[0]
-          dpPopulateDetails(open_repo)
+      if (params.hasOwnProperty('repo')) {
+        this.populateRepoDetails(data.items, params)
+        this.getFirstCommits('marvin-ai', params.repo, '1')
+      }
+    } catch (err) {
+      throw(err)
+    }
+  }
 
-          getCommitsPerPage('marvin-ai', open_repo.name, '1')
-            .then(({ data }) => dpGetCommits(data))
-            .catch(() => dpGetCommits([]))
-        }
-      })
+  componentDidMount () {
+    this.firstLoadDataFetch()
   }
 
   componentWillReceiveProps (nextProps) {
     const oldparams = this.props.match.params
     const { params } = nextProps.match
-    const { dpGetCommits, dpPopulateDetails, repos } = this.props
+    const { repos } = this.props
 
     if (params.hasOwnProperty('repo') && params.repo !== oldparams.repo) {
-      const open_repo = repos.filter(r => (r.name === params.repo))[0]
-      dpPopulateDetails(open_repo)
-
-      getCommitsPerPage('marvin-ai', open_repo.name, '1')
-        .then(({ data }) => dpGetCommits(data))
-        .catch(() => dpGetCommits([]))
+      this.populateRepoDetails(repos, params)
+      this.getFirstCommits('marvin-ai', params.repo, '1')
     }
   }
 

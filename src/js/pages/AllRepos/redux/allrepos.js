@@ -8,7 +8,9 @@ const initialState = {
   loading: true,
   repos: [],
   total: 0,
-  open_repo: {},
+  open_repo: {
+    name: ''
+  },
   commits: []
 }
 
