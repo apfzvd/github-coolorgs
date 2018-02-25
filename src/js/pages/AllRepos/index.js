@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount, paginateCommits, moreCommits, willGetCommits } from './redux/allrepos'
+import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount, paginateCommits, moreCommits, willGetCommits, toggleMenu } from './redux/allrepos'
 import { getFirstRepos, getCommitsPerPage, getContributorsTotal, getCommitsTotal } from './requests'
 import { getLastPage } from 'utils'
 // import s from './allrepo-style.css'
@@ -105,11 +105,24 @@ class AllRepos extends Component {
   }
 
   render () {
-    const { loading, error, repos, open_repo, commits, org, total_contribs, pages, current_page, loading_commits } = this.props
+    const {
+      loading,
+      error,
+      repos,
+      open_repo,
+      commits,
+      org,
+      total_contribs,
+      pages,
+      current_page,
+      loading_commits,
+      dpToggleMenu,
+      menu_open
+    } = this.props
 
     return (
       <section className='flex flex-row-ns flex-column'>
-        { loading ? <Loading /> : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
+        { loading ? <Loading /> : <ListRepos menuOpen={menu_open} toggleMenu={() => dpToggleMenu()} open={open_repo.name} repos={repos} org={org} /> }
         {
           !loading && <RepoDetail
             error={error}
@@ -139,7 +152,8 @@ const mapDispatchToProps = dispatch => {
     dpMoreCommits: res => dispatch(moreCommits(res)),
     dpContribCount: total => dispatch(contribCount(total)),
     dpCommitCount: total => dispatch(commitCount(total)),
-    dpPaginateCommits: () => dispatch(paginateCommits())
+    dpPaginateCommits: () => dispatch(paginateCommits()),
+    dpToggleMenu: () => dispatch(toggleMenu())
   }
 }
 

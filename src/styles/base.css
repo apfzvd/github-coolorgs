@@ -2,3 +2,7 @@
   box-sizing: border-box;
   font-family: 'Fira Sans', sans-serif;
 }
+
+a:focus {
+  outline: 0 !important;
+}

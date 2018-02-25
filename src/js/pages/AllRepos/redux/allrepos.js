@@ -8,9 +8,11 @@ const MORE_COMMITS = 'MORE_COMMITS'
 const COMMIT_COUNT = 'COMMIT_COUNT'
 const CONTRIB_COUNT = 'CONTRIB_COUNT'
 const PAGINATE = 'PAGINATE'
+const TOGGLE_MENU = 'TOGGLE_MENU'
 
 const initialState = {
   org: 'marvin-ai',
+  menu_open: false,
   loading: true,
   loading_commits: {
     first: false,
@@ -33,10 +35,10 @@ const initialState = {
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-  case 'teste':
+  case TOGGLE_MENU:
     return {
       ...state,
-      loading: true
+      menu_open: !state.menu_open
     }
   case GET_REPOS:
     return {
@@ -150,4 +152,8 @@ export const commitCount = total => ({
 
 export const paginateCommits = () => ({
   type: PAGINATE
+})
+
+export const toggleMenu = () => ({
+  type: TOGGLE_MENU
 })

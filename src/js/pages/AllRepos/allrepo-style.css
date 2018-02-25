@@ -11,7 +11,7 @@
   color: #4d78e8;
 }
 
-@-webkit-keyframes rotation {
+@keyframes rotation {
 	from {
 	  transform: rotate(0deg);
 	}
@@ -51,7 +51,6 @@
 
 .contentsize {
   height: calc(100vh - 87px); /* minus header */
-  /* height: 60vh; */
   overflow: hidden;
   overflow-y: scroll;;
 }
@@ -73,6 +72,10 @@
 /* small only */
 @media (max-width: 30em) {
   .triangle { display: none; }
+
+  .contentsize {
+    height: calc(100vh - 126px - 82px); /* minus header */
+  }
 
   .fadeOutsm {
     visibility: hidden;
