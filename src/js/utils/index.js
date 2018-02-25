@@ -11,3 +11,16 @@ export const getLastPage = string => {
 
   return num
 }
+
+export const transformDate = date => {
+  if (typeof date !== 'string') {
+    return false
+  }
+
+  const rxDate = /(\d{1,}-\d{1,}-\d{1,})/g
+
+  const cleanDate = date.match(rxDate) ? date.match(rxDate)[0] : []
+  const dateArr = cleanDate.indexOf('-') !== -1 ? cleanDate.split('-') : []
+
+  return dateArr.length === 3 ? `${dateArr[1]}/${dateArr[2]}/${dateArr[0]}` : false
+}

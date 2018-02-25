@@ -11,8 +11,8 @@ const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contrib
       { id && <DetailHeader star={stargazers_count} fork={forks_count} contrib={contributors}/> }
 
       <div className={`${s.contentsize} overflow-y-scroll`}>
-        { (!error.status && !id) && <h4 className='tc'>Escolha um repositório!</h4> }
         { error.status && <h4 className='tc'> {error.msg} </h4> }
+        { (!error.status && !id) && <h4 className='tc'>Escolha um repositório!</h4> }
         { (!error.status && id) && <ListCommits loading={loadCommits} commits={commits} /> }
         { showLoadMore && <LoadMore loading={loadCommits} more={more} /> }
       </div>

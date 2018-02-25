@@ -2,6 +2,10 @@
   background: #4d78e8;
 }
 
+.bluecolor {
+  color: #4d78e8;
+}
+
 .triangle {
   display: inline-block;
   position: absolute;
@@ -31,6 +35,16 @@
   text-rendering: auto;
 }
 
-.contentsize {
-  height: calc(100vh - 87px); /* minus header */
+.commitscontainer:before {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 3px;
+  background: #4d78e8;
+  position: absolute;
+  left: calc(2rem + 6px);
+}
+
+.commitscontainer i {
+  font-size: 17px;
 }
