@@ -6,11 +6,21 @@ var loadCssModules = function (env) {
   if (env !== 'production') {
     return [
       {loader: 'style-loader'},
-      {loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]_[local]_[hash:base64:5]'}
+      {loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]_[local]_[hash:base64:5]'},
+      {loader: 'postcss-loader', options: {
+        plugins: () => [
+          require('autoprefixer')()
+        ]
+      }}
     ]
   } else {
     return ExtractTextPlugin.extract([
       {loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]_[local]_[hash:base64:5]'},
+      {loader: 'postcss-loader', options: {
+        plugins: () => [
+          require('autoprefixer')()
+        ]
+      }}
     ])
   }
 }
