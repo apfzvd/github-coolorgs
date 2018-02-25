@@ -5,7 +5,7 @@ import DetailHeader from './DetailHeader'
 import LoadMore from './LoadMore'
 import s from '../allrepo-style.css'
 
-const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contributors, more, showLoad }) => {
+const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contributors, more, showLoadMore, loadCommits }) => {
   return (
     <div className='w-60 black-50'>
       { id && <DetailHeader star={stargazers_count} fork={forks_count} contrib={contributors}/> }
@@ -13,8 +13,8 @@ const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contrib
       <div className={`${s.contentsize} overflow-y-scroll`}>
         { (!error.status && !id) && <h4 className='tc'>Escolha um repositório!</h4> }
         { error.status && <h4 className='tc'> {error.msg} </h4> }
-        { (!error.status && id) && <ListCommits commits={commits} /> }
-        { showLoad && <LoadMore more={more} /> }
+        { (!error.status && id) && <ListCommits loading={loadCommits} commits={commits} /> }
+        { showLoadMore && <LoadMore loading={loadCommits} more={more} /> }
       </div>
     </div>
   )
