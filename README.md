@@ -16,7 +16,7 @@ First, install all the dependencies with npm or yarn:
 yarn install or npm install
 ```
 
-Then, you need to build the application and start the dev server:
+Then, you need to start the dev server:
 
 ```
 yarn start
