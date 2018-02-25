@@ -108,7 +108,7 @@ class AllRepos extends Component {
     const { loading, error, repos, open_repo, commits, org, total_contribs, pages, current_page, loading_commits } = this.props
 
     return (
-      <section className='flex'>
+      <section className='flex flex-row-ns flex-column'>
         { loading ? <Loading /> : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
         {
           !loading && <RepoDetail

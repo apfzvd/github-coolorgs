@@ -69,3 +69,39 @@
 .commitscontainer i {
   font-size: 17px;
 }
+
+/* small only */
+@media (max-width: 30em) {
+  .triangle { display: none; }
+
+  .fadeOutsm {
+    visibility: hidden;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    max-height: 0;
+    -webkit-transition: opacity 300ms linear,
+                visibility 500ms linear,
+                max-height 500ms linear;
+    transition: opacity 300ms linear,
+                visibility 500ms linear,
+                max-height 500ms linear;
+  }
+
+  .fadeInsm {
+    visibility: visible;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    max-height: 2000px;
+    -webkit-transition: opacity 300ms ease;
+    transition: opacity 300ms ease;
+  }
+}
+
+/* not small */
+@media (min-width: 30em) {}
+
+ /* medium */
+@media (min-width: 30em) and (max-width:80em) {}
+
+/* large */
+@media (min-width: 80em) {}

@@ -7,7 +7,7 @@ import s from '../allrepo-style.css'
 
 const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contributors, more, showLoadMore, loadCommits }) => {
   return (
-    <div className='w-60 black-50'>
+    <div className='w-60-ns black-50'>
       { id && <DetailHeader star={stargazers_count} fork={forks_count} contrib={contributors}/> }
 
       <div className={`${s.contentsize} overflow-y-scroll`}>
