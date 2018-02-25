@@ -5,7 +5,7 @@ import { transformDate } from 'utils'
 
 const ListCommits = ({ commits, loading }) => {
   return (
-    <div className={`ph4 h-100 relative ${!loading.first ? s.commitscontainer : ''}`}>
+    <div className={`ph4 relative ${!loading.first ? s.commitscontainer : ''}`}>
       {
         loading.first
           ? <div className='mv3'>Carregando commits...</div>

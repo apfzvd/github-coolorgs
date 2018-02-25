@@ -49,6 +49,13 @@
   text-rendering: auto;
 }
 
+.contentsize {
+  height: calc(100vh - 87px); /* minus header */
+  /* height: 60vh; */
+  overflow: hidden;
+  overflow-y: scroll;;
+}
+
 .commitscontainer:before {
   content: '';
   display: block;

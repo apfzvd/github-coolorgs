@@ -22,5 +22,5 @@ export const transformDate = date => {
   const cleanDate = date.match(rxDate) ? date.match(rxDate)[0] : []
   const dateArr = cleanDate.indexOf('-') !== -1 ? cleanDate.split('-') : []
 
-  return dateArr.length === 3 ? `${dateArr[1]}/${dateArr[2]}/${dateArr[0]}` : false
+  return dateArr.length === 3 ? `${dateArr[2]}/${dateArr[1]}/${dateArr[0]}` : false
 }
