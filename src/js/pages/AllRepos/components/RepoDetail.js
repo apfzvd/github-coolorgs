@@ -21,7 +21,9 @@ const RepoDetail = ({ commits, id, stargazers_count, forks_count, error, contrib
 }
 
 RepoDetail.propTypes = {
-  repository: PropTypes.array
+  commits: PropTypes.array,
+  error: PropTypes.object,
+  more: PropTypes.func
 }
 
 export default RepoDetail

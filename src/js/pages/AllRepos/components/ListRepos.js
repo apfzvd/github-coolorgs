@@ -28,7 +28,9 @@ const ListRepos = ({ repos, org, open }) => {
 }
 
 ListRepos.propTypes = {
-  repos: PropTypes.array
+  repos: PropTypes.array,
+  org: PropTypes.string,
+  open: PropTypes.string
 }
 
 export default ListRepos

@@ -7,6 +7,7 @@ import { getLastPage } from 'utils'
 
 import ListRepos from './components/ListRepos'
 import RepoDetail from './components/RepoDetail'
+import Loading from './components/Loading'
 
 class AllRepos extends Component {
 
@@ -108,7 +109,7 @@ class AllRepos extends Component {
 
     return (
       <section className='flex'>
-        { loading ? 'Loading...' : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
+        { loading ? <Loading /> : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
         {
           !loading && <RepoDetail
             error={error}

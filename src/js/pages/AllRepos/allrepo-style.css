@@ -6,6 +6,20 @@
   color: #4d78e8;
 }
 
+.loading {
+	animation: rotation 2s infinite linear;
+  color: #4d78e8;
+}
+
+@-webkit-keyframes rotation {
+	from {
+	  transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
+}
+
 .triangle {
   display: inline-block;
   position: absolute;

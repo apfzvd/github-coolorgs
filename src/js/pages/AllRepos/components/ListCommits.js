@@ -28,7 +28,8 @@ const ListCommits = ({ commits, loading }) => {
 }
 
 ListCommits.propTypes = {
-  commits: PropTypes.array
+  commits: PropTypes.array,
+  loading: PropTypes.object
 }
 
 export default ListCommits
