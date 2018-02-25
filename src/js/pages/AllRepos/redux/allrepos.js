@@ -3,8 +3,10 @@ const GET_REPOS = 'GET_REPOS'
 const REPO_FAIL = 'REPO_FAIL'
 const GET_DETAILS = 'GET_DETAILS'
 const GET_COMMITS = 'GET_COMMITS'
+const MORE_COMMITS = 'MORE_COMMITS'
 const COMMIT_COUNT = 'COMMIT_COUNT'
 const CONTRIB_COUNT = 'CONTRIB_COUNT'
+const PAGINATE = 'PAGINATE'
 
 const initialState = {
   org: 'marvin-ai',
@@ -47,6 +49,8 @@ export default (state = initialState, action) => {
     return {
       ...state,
       error: initialState.error,
+      pages: initialState.pages,
+      current_page: initialState.current_page,
       open_repo: action.res
     }
   case GET_COMMITS:
@@ -55,16 +59,27 @@ export default (state = initialState, action) => {
       error: initialState.error,
       commits: action.res
     }
+  case MORE_COMMITS:
+    return {
+      ...state,
+      error: initialState.error,
+      commits: state.commits.concat(action.res)
+    }
   case COMMIT_COUNT:
     return {
       ...state,
       total_commits: action.total,
-      pages: Math.round((parseFloat(action.total)) / 20)
+      pages: Math.ceil((parseFloat(action.total)) / 20)
     }
   case CONTRIB_COUNT:
     return {
       ...state,
       total_contribs: action.total
+    }
+  case PAGINATE:
+    return {
+      ...state,
+      current_page: state.current_page + 1
     }
   default:
     return state
@@ -93,6 +108,11 @@ export const getCommits = res => ({
   res
 })
 
+export const moreCommits = res => ({
+  type: MORE_COMMITS,
+  res
+})
+
 export const contribCount = total => ({
   type: CONTRIB_COUNT,
   total
@@ -101,4 +121,8 @@ export const contribCount = total => ({
 export const commitCount = total => ({
   type: COMMIT_COUNT,
   total
+})
+
+export const paginateCommits = () => ({
+  type: PAGINATE
 })

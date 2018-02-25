@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount } from './redux/allrepos'
+import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount, paginateCommits, moreCommits } from './redux/allrepos'
 import { getFirstRepos, getCommitsPerPage, getContributorsTotal, getCommitsTotal } from './requests'
 import { getLastPage } from 'utils'
 // import s from './allrepo-style.css'
@@ -34,6 +34,17 @@ class AllRepos extends Component {
     }
   }
 
+  async paginate () {
+    const { dpPaginateCommits, dpMoreCommits, current_page, pages, org } = this.props
+    const { params } = this.props.match
+
+    if(pages > current_page) {
+      dpPaginateCommits()
+      const { data } = await getCommitsPerPage(org, params.repo, current_page + 1)
+      dpMoreCommits(data)
+    }
+  }
+
   async getFirstCommits (org, repo) {
     const { dpCommitCount, dpContribCount, dpGetCommits, dpthrowError } = this.props
 
@@ -47,10 +58,10 @@ class AllRepos extends Component {
     }
   }
 
-  populateRepoDetails (repos, params) {
+  populateRepoDetails (repos, repo) {
     const { dpPopulateDetails } = this.props
 
-    const open_repo = repos.filter(r => (r.name === params.repo))[0]
+    const open_repo = repos.filter(r => (r.name === repo))[0]
     open_repo ? dpPopulateDetails(open_repo) : {}
   }
 
@@ -63,7 +74,7 @@ class AllRepos extends Component {
       dpPopulateRepos(data.items, data.total_count)
 
       if (params.hasOwnProperty('repo')) {
-        this.populateRepoDetails(data.items, params)
+        this.populateRepoDetails(data.items, params.repo)
         this.getAllContribs(org, params.repo)
         this.getAllCommits(org, params.repo)
         this.getFirstCommits(org, params.repo)
@@ -91,12 +102,12 @@ class AllRepos extends Component {
   }
 
   render () {
-    const { loading, error, repos, open_repo, commits, org, total_contribs } = this.props
+    const { loading, error, repos, open_repo, commits, org, total_contribs, pages, current_page } = this.props
 
     return (
       <section className='flex'>
         { loading ? 'Loading...' : <ListRepos open={open_repo.name} repos={repos} org={org} /> }
-        { !loading && <RepoDetail error={error} commits={commits} contributors={total_contribs} {...open_repo}/> }
+        { !loading && <RepoDetail error={error} showLoad={(pages > current_page)} more={() => this.paginate()} commits={commits} contributors={total_contribs} {...open_repo}/> }
       </section>
     )
   }
@@ -111,8 +122,10 @@ const mapDispatchToProps = dispatch => {
     dpthrowError: msg => dispatch(throwError(msg)),
     dpPopulateDetails: res => dispatch(populateDetails(res)),
     dpGetCommits: res => dispatch(getCommits(res)),
+    dpMoreCommits: res => dispatch(moreCommits(res)),
     dpContribCount: total => dispatch(contribCount(total)),
-    dpCommitCount: total => dispatch(commitCount(total))
+    dpCommitCount: total => dispatch(commitCount(total)),
+    dpPaginateCommits: () => dispatch(paginateCommits())
   }
 }
 

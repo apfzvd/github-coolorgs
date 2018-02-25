@@ -30,3 +30,7 @@
   font-size: inherit;
   text-rendering: auto;
 }
+
+.contentsize {
+  height: calc(100vh - 87px); /* minus header */
+}

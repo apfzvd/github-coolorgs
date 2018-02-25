@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const ListCommits = ({ commits }) => {
   return (
-    <div className='pl4'>
+    <div className='ph4'>
       {
         commits.length
           ? commits.map(c => {
