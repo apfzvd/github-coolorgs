@@ -3,6 +3,8 @@
   font-family: 'Fira Sans', sans-serif;
 }
 
-a:focus {
+a:focus,
+input:focus,
+button:focus {
   outline: 0 !important;
 }

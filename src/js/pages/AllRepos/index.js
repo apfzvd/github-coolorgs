@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { populateRepos, throwError, populateDetails, getCommits, contribCount, commitCount, paginateCommits, moreCommits, willGetCommits, toggleMenu } from './redux/allrepos'
-import { getFirstRepos, getCommitsPerPage, getContributorsTotal, getCommitsTotal } from './requests'
+import * as action from './redux/allrepos'
+import * as rq from './requests'
 import { getLastPage } from 'utils'
-// import s from './allrepo-style.css'
 
 import ListRepos from './components/ListRepos'
 import RepoDetail from './components/RepoDetail'
@@ -13,24 +12,24 @@ class AllRepos extends Component {
 
   async getAllContribs (org, repo) {
     const { dpContribCount, error } = this.props
-    const { headers } = await getContributorsTotal(org, repo)
+    const { headers } = await rq.getContributorsTotal(org, repo)
 
     if (headers.hasOwnProperty('link')) {
       const contribsCount = getLastPage(headers.link) // gets last page on github's pagination
       dpContribCount(contribsCount)
-    } else { // doensn't show pagination if there's only one page
+    } else {
       !error.status && dpContribCount(1)
     }
   }
 
   async getAllCommits (org, repo) {
     const { dpCommitCount } = this.props
-    const { headers } = await getCommitsTotal(org, repo)
+    const { headers } = await rq.getCommitsTotal(org, repo)
 
     if (headers.hasOwnProperty('link')) {
       const commitCount = getLastPage(headers.link) // gets last page on github's pagination
       dpCommitCount(commitCount)
-    } else {
+    } else { // doensn't show pagination if there's only one page
       dpCommitCount(1)
     }
   }
@@ -42,7 +41,7 @@ class AllRepos extends Component {
     if(pages > current_page) {
       dpPaginateCommits()
       dpWillGetCommits('more')
-      const { data } = await getCommitsPerPage(org, params.repo, current_page + 1)
+      const { data } = await rq.getCommitsPerPage(org, params.repo, current_page + 1)
       dpMoreCommits(data)
     }
   }
@@ -52,7 +51,7 @@ class AllRepos extends Component {
 
     try {
       dpWillGetCommits('first')
-      const { data } = await getCommitsPerPage(org, repo, '1')
+      const { data } = await rq.getCommitsPerPage(org, repo, '1')
       dpGetCommits(data)
     } catch ({ ...err }) {
       dpthrowError(`Erro: ${err.response.data.message}`)
@@ -69,11 +68,12 @@ class AllRepos extends Component {
   }
 
   async firstLoadDataFetch () {
-    const { dpPopulateRepos, dpthrowError, org } = this.props
+    const { dpWillGetRepos, dpPopulateRepos, dpthrowError, org } = this.props
     const { params } = this.props.match
 
     try {
-      const { data } = await getFirstRepos(org)
+      dpWillGetRepos()
+      const { data } = await rq.getFirstRepos(org)
       dpPopulateRepos(data.items, data.total_count)
 
       if (params.hasOwnProperty('repo')) {
@@ -111,18 +111,28 @@ class AllRepos extends Component {
       repos,
       open_repo,
       commits,
-      org,
       total_contribs,
       pages,
       current_page,
       loading_commits,
       dpToggleMenu,
-      menu_open
+      menu_open,
+      org
     } = this.props
 
     return (
       <section className='flex flex-row-ns flex-column'>
-        { loading ? <Loading /> : <ListRepos menuOpen={menu_open} toggleMenu={() => dpToggleMenu()} open={open_repo.name} repos={repos} org={org} /> }
+        {
+          loading
+            ? <Loading />
+            : <ListRepos
+              menuOpen={menu_open}
+              toggleMenu={() => dpToggleMenu()}
+              open={open_repo.name}
+              repos={repos}
+              org={org} />
+        }
+
         {
           !loading && <RepoDetail
             error={error}
@@ -140,20 +150,26 @@ class AllRepos extends Component {
 
 }
 
-const mapStateToProps = ({ allrepos }) => allrepos
+const mapStateToProps = ({ allrepos, chooseorg }) => {
+  return {
+    ...allrepos,
+    org: chooseorg.org
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
-    dpPopulateRepos: (res, total) => dispatch(populateRepos(res, total)),
-    dpthrowError: msg => dispatch(throwError(msg)),
-    dpPopulateDetails: res => dispatch(populateDetails(res)),
-    dpGetCommits: res => dispatch(getCommits(res)),
-    dpWillGetCommits: moment => dispatch(willGetCommits(moment)),
-    dpMoreCommits: res => dispatch(moreCommits(res)),
-    dpContribCount: total => dispatch(contribCount(total)),
-    dpCommitCount: total => dispatch(commitCount(total)),
-    dpPaginateCommits: () => dispatch(paginateCommits()),
-    dpToggleMenu: () => dispatch(toggleMenu())
+    dpWillGetRepos: () => dispatch(action.willGetRepos()),
+    dpPopulateRepos: (res, total) => dispatch(action.populateRepos(res, total)),
+    dpthrowError: msg => dispatch(action.throwError(msg)),
+    dpPopulateDetails: res => dispatch(action.populateDetails(res)),
+    dpGetCommits: res => dispatch(action.getCommits(res)),
+    dpWillGetCommits: moment => dispatch(action.willGetCommits(moment)),
+    dpMoreCommits: res => dispatch(action.moreCommits(res)),
+    dpContribCount: total => dispatch(action.contribCount(total)),
+    dpCommitCount: total => dispatch(action.commitCount(total)),
+    dpPaginateCommits: () => dispatch(action.paginateCommits()),
+    dpToggleMenu: () => dispatch(action.toggleMenu())
   }
 }
 

@@ -5,10 +5,12 @@ import { Provider } from 'react-redux'
 import { combineReducers, createStore } from 'redux'
 
 import allrepos from './pages/AllRepos/redux/allrepos'
+import chooseorg from './pages/ChooseOrg/redux/chooseorg'
 
 const dev_tools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 const appState = combineReducers({
-  allrepos
+  allrepos,
+  chooseorg
 })
 
 const store = createStore(appState, dev_tools)

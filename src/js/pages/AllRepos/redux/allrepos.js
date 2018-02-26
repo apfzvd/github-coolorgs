@@ -1,4 +1,5 @@
 // Constants
+const WILL_GET_REPOS = 'WILL_GET_REPOS'
 const GET_REPOS = 'GET_REPOS'
 const REPO_FAIL = 'REPO_FAIL'
 const GET_DETAILS = 'GET_DETAILS'
@@ -11,7 +12,6 @@ const PAGINATE = 'PAGINATE'
 const TOGGLE_MENU = 'TOGGLE_MENU'
 
 const initialState = {
-  org: 'marvin-ai',
   menu_open: false,
   loading: true,
   loading_commits: {
@@ -40,9 +40,14 @@ export default (state = initialState, action) => {
       ...state,
       menu_open: !state.menu_open
     }
-  case GET_REPOS:
+  case WILL_GET_REPOS:
     return {
       ...state,
+      loading: true
+    }
+  case GET_REPOS:
+    return {
+      ...initialState,
       loading: false,
       repos: action.res,
       total: action.total,
@@ -50,7 +55,7 @@ export default (state = initialState, action) => {
     }
   case REPO_FAIL:
     return {
-      ...state,
+      ...initialState,
       loading: false,
       error: {
         status: true,
@@ -109,6 +114,10 @@ export default (state = initialState, action) => {
 }
 
 // Action Creators
+export const willGetRepos = () => ({
+  type: WILL_GET_REPOS
+})
+
 export const populateRepos = (res, total) => ({
   type: GET_REPOS,
   res,
