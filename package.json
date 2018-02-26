@@ -4,6 +4,7 @@
   "description": "Front-End Challenge",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint ./src/",
     "build": "ENV=production webpack",
     "start": "webpack-dev-server --history-api-fallback --hot --open"
   },

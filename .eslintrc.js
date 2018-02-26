@@ -1,16 +1,17 @@
 module.exports = {
     "env": {
-        "browser": true,
-        "es6": true
+      "browser": true,
+      "node": true,
+      "es6": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 2017,
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
-            "jsx": true
-        },
-        "sourceType": "module"
+      "sourceType": "module",
+      "ecmaVersion": 8,
+      "ecmaFeatures": {
+        "experimentalObjectRestSpread": true,
+        "jsx": true
+      }
     },
     "plugins": [
         "react"
@@ -19,6 +20,9 @@ module.exports = {
         "indent": ["error", 2],
         "quotes": [ "warn", "single" ],
         "semi": [ "warn", "never" ],
-        "no-undef": "warn"
+        "no-undef": "warn",
+        "react/jsx-no-undef": "error",
+        "react/jsx-uses-react": "warn",
+        "react/jsx-uses-vars": "warn"
     }
 };
