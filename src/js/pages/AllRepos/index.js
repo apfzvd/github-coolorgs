@@ -54,7 +54,7 @@ class AllRepos extends Component {
       const { data } = await rq.getCommitsPerPage(org, repo, '1')
       dpGetCommits(data)
     } catch ({ ...err }) {
-      dpthrowError(`Erro: ${err.response.data.message}`)
+      dpthrowError(`Erro: ${err.response.data.message}`, false)
       dpCommitCount(0)
       dpContribCount(0)
     }
@@ -82,8 +82,8 @@ class AllRepos extends Component {
         this.getAllCommits(org, params.repo)
         this.getFirstCommits(org, params.repo)
       }
-    } catch (err) {
-      dpthrowError('Essa organização não existe :(')
+    } catch ({ ...err }) {
+      dpthrowError('Essa organização não existe :(', true)
     }
   }
 
@@ -161,7 +161,7 @@ const mapDispatchToProps = dispatch => {
   return {
     dpWillGetRepos: () => dispatch(action.willGetRepos()),
     dpPopulateRepos: (res, total) => dispatch(action.populateRepos(res, total)),
-    dpthrowError: msg => dispatch(action.throwError(msg)),
+    dpthrowError: (msg, reset) => dispatch(action.throwError(msg, reset)),
     dpPopulateDetails: res => dispatch(action.populateDetails(res)),
     dpGetCommits: res => dispatch(action.getCommits(res)),
     dpWillGetCommits: moment => dispatch(action.willGetCommits(moment)),

@@ -1,7 +1,7 @@
 // Constants
 const WILL_GET_REPOS = 'WILL_GET_REPOS'
 const GET_REPOS = 'GET_REPOS'
-const REPO_FAIL = 'REPO_FAIL'
+const THROW_ERROR = 'THROW_ERROR'
 const GET_DETAILS = 'GET_DETAILS'
 const GET_COMMITS = 'GET_COMMITS'
 const WILL_GET_COMMITS = 'WILL_GET_COMMITS'
@@ -53,9 +53,9 @@ export default (state = initialState, action) => {
       total: action.total,
       error: initialState.error
     }
-  case REPO_FAIL:
+  case THROW_ERROR:
     return {
-      ...initialState,
+      ...(action.reset ? initialState : state),
       loading: false,
       error: {
         status: true,
@@ -124,9 +124,10 @@ export const populateRepos = (res, total) => ({
   total
 })
 
-export const throwError = msg => ({
-  type: REPO_FAIL,
-  msg
+export const throwError = (msg, reset) => ({
+  type: THROW_ERROR,
+  msg,
+  reset
 })
 
 export const populateDetails = res => ({
