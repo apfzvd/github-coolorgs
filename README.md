@@ -1,6 +1,8 @@
 # Github CoolOrgs
 
 Displays the 10 most starred repos in a Github Organization.
+Live demo at [https://github-cool-orgs.herokuapp.com/](https://github-cool-orgs.herokuapp.com/)
+
 This project uses the following stack:
 
 - React
@@ -38,7 +40,7 @@ yarn lint
 ### Routes
 
 The `index route` renders the repos for the organization `marvin-ai`.
-Click the title to change the current organization.
+Click on the title to change the current organization.
 
 The route `/:repos` renders info about the current org's chosen repository. Stars, forks, contribs and commits.
 
